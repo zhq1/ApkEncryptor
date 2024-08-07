@@ -1,0 +1,41 @@
+# .github/workflows/gradle.yml
+
+name: Build APKEncryptor-Android
+
+on:
+  push:
+    branches:
+      - main # 或你希望触发构建的其他分支
+  pull_request:
+    branches:
+      - main # 针对主分支的 PR 将触发构建 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11' # 根据你的项目需要选择合适的 Java 版本
+          distribution: 'temurin'
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build with Gradle
+        working-directory: main/APKEncryptor-Android # 指定工作目录
+        run: ./gradlew build # 使用 gradlew 脚本构建项目
+
+      - name: Run tests
+        working-directory: main/APKEncryptor-Android # 指定工作目录
+        run: ./gradlew test # 运行测试任务

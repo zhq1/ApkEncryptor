@@ -3,10 +3,10 @@ name: Gradle CI
 on: 
   push:
     branches:
-      - main
+      - main/APKEncryptor-Android
   pull_request:
     branches:
-      - main
+      - main/APKEncryptor-Android
 
 jobs:
   build:
